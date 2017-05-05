@@ -1,3 +1,9 @@
+// image.go
+
+// Version:	0.1.
+// Date: 	2017-05-05.
+// Author:	McArcher.
+
 package main
 
 import (
@@ -115,6 +121,7 @@ func processFile(path_src, path_dst, ext string) {
 	file, err = os.Open(path_src)
 	if err != nil {
 		fmt.Println("Error opening image:", path_src) //
+		return
 	}
 
 	// Decode File
@@ -126,15 +133,23 @@ func processFile(path_src, path_dst, ext string) {
 	} else if ext == "png" {
 
 		*img, err = png.Decode(file)
+
+	} else {
+
+		fmt.Println("Un-known extension:", ext) //
+		return
+
 	}
 	if err != nil {
 		fmt.Println("Error decoding image:", path_src) //
+		return
 	}
 
 	// Close opened File
 	err = file.Close()
 	if err != nil {
 		fmt.Println("Error closing file:", path_src) //
+		return
 	}
 
 	// Process Image
@@ -146,6 +161,7 @@ func processFile(path_src, path_dst, ext string) {
 	file2, err = os.Create(path_dst)
 	if err != nil {
 		fmt.Println("Error creating file:", path_dst) //
+		return
 	}
 
 	// Encode & put Image to File
@@ -164,12 +180,14 @@ func processFile(path_src, path_dst, ext string) {
 	}
 	if err != nil {
 		fmt.Println("Error encoding image:", path_dst) //
+		return
 	}
 
 	// Close opened File
 	err = file2.Close()
 	if err != nil {
 		fmt.Println("Error closing file:", path_dst) //
+		return
 	}
 }
 
