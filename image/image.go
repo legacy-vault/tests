@@ -204,7 +204,8 @@ func processImage(imgA, imgB *image.Image) {
 	var rect image.Rectangle
 	var col, pixel_old color.Color
 	var wA, hA, x, y, y_max, x_max int
-	var r, g, b, a, ch_grey, ch_min, ch_max, ch_min_img, ch_max_img, lt_pix, pix_count uint32
+	var r, g, b, a, lt_pix, pix_count uint32
+	var ch_result, ch_grey, ch_min, ch_max, ch_min_img, ch_max_img uint32
 	var nr, ng, nb, na uint8
 	var st, k, lightness, k_dark, contrast_max_k, kr, kg, kb, kmin, krnd, kextra float64
 
@@ -310,12 +311,12 @@ func processImage(imgA, imgB *image.Image) {
 			ch_grey = ch_max
 
 			// Increase Contrast
-			ch_max = uint32(math.Pow(float64(ch_grey), float64(st)) / k)
+			ch_result = uint32(math.Pow(float64(ch_grey), float64(st)) / k)
 
 			// Colorize
-			nr = uint8(kr * float64(ch_grey) / 256)
-			ng = uint8(kg * float64(ch_grey) / 256)
-			nb = uint8(kb * float64(ch_grey) / 256)
+			nr = uint8(kr * float64(ch_result) / 256)
+			ng = uint8(kg * float64(ch_result) / 256)
+			nb = uint8(kb * float64(ch_result) / 256)
 
 			// Alpha Channel
 			na = uint8(a / 256) // is not Changed
