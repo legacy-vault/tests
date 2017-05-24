@@ -1,0 +1,48 @@
+
+// logic/modules.txt
+
+// Version: 1.0.
+// Date:    2017-05-24.
+// Author:  McArcher.
+
+--------------------------------------------------
+List of Modules
+--------------------------------------------------
+
+1. [ Themes List ]
+2. [ All Articles in all Themes List ]
+3. [ All Articles of one Theme List ]
+4. [ One Article ]
+5. [ Visitors Count ]
+
+--------------------------------------------------
+
+1.  [ Themes List ]
+    Shows a List of all Themes.
+    mod_themes_list();
+    
+--------------------------------------------------
+
+2.  [ All Articles in all Themes List ]
+    Shows all Articles in all Themes.
+    mod_articles_list_all();
+    
+--------------------------------------------------
+
+3.  [ All Articles of one Theme List ]
+    Shows all Articles of one Theme.
+    mod_articles_of_theme($theme_id);
+    
+--------------------------------------------------
+
+4.  [ One Article ]
+    Shows an Article, requested in '$id' Parameter.
+    mod_article_show($article_id);
+
+--------------------------------------------------
+
+5.  [ Visitors Count ]
+    Shows the Number of Unique and All Vivitors.
+    mod_visitors_txt();
+
+--------------------------------------------------
