@@ -6,15 +6,15 @@
 // Date:    2017-05-24.
 // Author:  McArcher.
 
-include_once 'conf/config.php';
-include_once $path_logic_article;
-include_once $path_logic_theme;
-include_once $path_logic_db;
-include_once $path_logic_visitor;
-include_once $path_logic_init;
+require_once 'conf/config.php';
+require_once $path_logic_article;
+require_once $path_logic_theme;
+require_once $path_logic_db;
+require_once $path_logic_visitor;
+require_once $path_logic_init;
 
 // Header
-include_once $path_html_header;
+require_once $path_html_header;
 
 /* BEGINNING OF MAIN WORKING AREA */
 
@@ -63,8 +63,8 @@ mod_visitors_txt();
 /* END OF MAIN WORKING AREA */
 
 // Footer
-include_once $path_html_footer;
+require_once $path_html_footer;
 
-include_once $path_logic_final;
+require_once $path_logic_final;
 
 ?>
