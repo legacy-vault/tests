@@ -20,6 +20,9 @@ List of Examples:
 * queue
 >Example of a simple Queue Server written in Golang. Also it is a good Example of a simple TCP Server.
 
+* rpc
+>Examples of RPC and JSON-RPC Server and Client in Go Language (golang).
+
 * soap
 >Example of SOAP Usage in PHP. SOAP Format is based on the XML Format.
 
