@@ -5,7 +5,6 @@ package main
 import (
 	"log"
 	"net"
-	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 )
@@ -87,11 +86,6 @@ func main() {
 		codec = jsonrpc.NewServerCodec(connection)
 
 		go srv.ServeCodec(codec)
-	}
-
-	err = http.Serve(listener, nil)
-	if err != nil {
-		log.Fatalf("Serve Error. %s\r\n", err) //dbg
 	}
 }
 
