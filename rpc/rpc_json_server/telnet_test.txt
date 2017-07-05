@@ -8,6 +8,6 @@ Escape character is '^]'.
 "params": [ { "A": 5, "B": 6 } ],
 "id":1
 }
-{"id":1,"result":30,"error":null}
+{"id":1,"result":{"X":30,"Y":123,"Z":"This is a test Result."},"error":null}
 exit
 Connection closed by foreign host.

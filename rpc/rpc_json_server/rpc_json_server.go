@@ -21,7 +21,11 @@ type Arguments struct {
 	B int
 }
 
-type Result int
+type Result struct {
+	X int
+	Y int
+	Z string
+}
 
 //------------------------------------------------------------------------------
 // Methods
@@ -29,7 +33,9 @@ type Result int
 
 func (t *Arithmetic) Multiply(args *Arguments, res *Result) error {
 
-	*res = Result(args.A * args.B)
+	res.X = args.A * args.B
+	res.Y = 123
+	res.Z = "This is a test Result."
 
 	return nil
 }
