@@ -17,6 +17,9 @@ List of Examples:
 * jp
 >Test Program that uses PostgreSQL DataBase in Go Language.
 
+* json_rpc_server_a
+>Example of JSON-RPC Server written in Go programming Language. It uses its own DataBase.
+
 * queue
 >Example of a simple Queue Server written in Golang. Also it is a good Example of a simple TCP Server.
 
