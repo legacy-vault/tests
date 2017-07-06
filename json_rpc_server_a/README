@@ -1,0 +1,12 @@
+This is an Example of JSON-RPC Server written in Go programming Language.
+
+The Example is done according to the Task, described in the File 'TASK'.
+
+This Program is intended for testing Purposes only!
+It lack some Features which increase Performance and so it is not ideal.
+
+For Example, in this Implementation, there are no Indexes for 'login' Field, also the Code lacks graceful Shutdown of the Server. Moreover, the automated Tests are not full. 
+
+Some Tests are written in '*_test.go' Files. They do some basic Testing. Other Tests may be done manually. Examples of test Client Methods can be found in the 'TEST' File in the Folder 'test'.
+
+Author: McArcher.
