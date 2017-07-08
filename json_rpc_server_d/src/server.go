@@ -145,14 +145,14 @@ func main() {
 	listener.Close()
 	log.Println("Stopped accepting new Connections.") //
 
-	// Wait for existing Requests to "finish"
-	// While the RequestsWaitGroup is chenged not by the RPC Server itself,
+	// While the RequestsWaitGroup is changed not by the RPC Server itself,
 	// but by the RPC Actions (Functions), this Method of getting the Number
 	// of running Requests is not precise. The Reason is simple: when the RPC
 	// Action calls 'RequestsWaitGroup.Done()' it needs some additional Time
-	// to return Results to its Caller (internal Engine of the RPC Server).
+	// to return Results to its Caller (internal Engine of the RPC Server)
+	// and the Caller itself must return Results to the Server's Client.
 	// While this Program uses built-in Golang's RPC Server, we can not
-	// controlhow the Server works. To make Everything well we should
+	// control how the Server works. To make Everything well, we should
 	// manipulate the RequestsWaitGroup in the Code of RPC Server. So, as a
 	// temporary (and not very reliable) Solution there is a Way to correct
 	// such Behaviour by waitng some additional Time after the RPC Action has
@@ -160,6 +160,8 @@ func main() {
 	// Practice, but it is better than Nothing. I hope that in future Versions
 	// of Golang Google will add 'Stop' and 'Shutdown' Methods to their RPC
 	// Server.
+
+	// Wait for existing Requests to "finish"
 	RequestsWaitGroup.Wait()
 	log.Println("Waiting", server_rpc_wait_interval, "Seconds for the RPC Actions to finish.") //
 	time.Sleep(rpcWaitInterval)
