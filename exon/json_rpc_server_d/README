@@ -1,0 +1,15 @@
+This is an Example of JSON-RPC Server written in Go programming Language.
+
+The Example is done according to the Task, described in the File 'TASK'.
+
+This Program is intended for testing Purposes only!
+
+The Server uses its own built-in File DataBase (D.B.) which is faster than any external SQL DataBase. The main Activity is done in the Memory of the Process which is the Reason for excellent Speed. Server periodically saves the Data to the File. The Saves are done incrementally. Each Record in the D.B. has a fixed Size making Alteration of Records very rapid and secure!
+
+This Program uses Golang's built-in RPC Server with all its good and bad Features. In this Google's Implementation, RPC Server has no 'Stop' and 'Shutdown' Methods. So, I have created some auxiliary Things to solve this Problem. Everything works fine except one Thing: the RPC Server does not show how many existing Requests are being processed at the Moment. I have done a lot to override this Behaviour but even after that, it is not 100% guaranteed that all the Requests will be properly finished. For Example, if the Client asks for a Request which takes Minutes to complete, this Algorithm will not help. But for now, it just works. For more serious Usage, another RPC Server is needed, but it is another, much bigger, Question.
+
+Some Tests are written in '*_test.go' Files. They do some basic Testing of the User Model. Other Tests may be done manually either by starting test Clients of three Types (one adds, one modifies and one gets and checks) or making Requests manually via Telnet. The three mentioned Clients may be started simultaneously in the following order: first is the first which adds, then the second which modifies, and the last third is the one which gets and checks. Examples of Requests for Telnet can be found in the 'TEST' File of the 'test' Folder. Please, notice that the automated Tests are not full.
+
+Author: McArcher.
+Version: 0.4.
+Date: 2017-07-08.

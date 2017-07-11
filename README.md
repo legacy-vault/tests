@@ -11,14 +11,17 @@ List of Examples:
 * apcu
 >Example of APCu Usage in PHP.
 
+* exon
+>Example of JSON-RPC Server written in Go programming Language. It uses its own DataBase and Golang's built-in RPC Server with JSON Codec.
+
 * image
 >Experiments with Color in Golang. Simple File Operations.
 
 * jp
 >Test Program that uses PostgreSQL DataBase in Go Language.
 
-* json_rpc_server_a
->Example of JSON-RPC Server written in Go programming Language. It uses its own DataBase.
+* os_signal_handler
+>Handler of Signals of Operating System (UNIX, GNU/Linux).
 
 * queue
 >Example of a simple Queue Server written in Golang. Also it is a good Example of a simple TCP Server.
