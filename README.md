@@ -11,6 +11,9 @@ List of Examples:
 * apcu
 >Example of APCu Usage in PHP.
 
+* array_sort_compar_1
+>Example of different Comparisson Methods and their Speed in the PHP scripting Language.
+
 * exon
 >Example of JSON-RPC Server written in Go programming Language. It uses its own DataBase and Golang's built-in RPC Server with JSON Codec.
 
@@ -22,6 +25,9 @@ List of Examples:
 
 * os_signal_handler
 >Handler of Signals of Operating System (UNIX, GNU/Linux).
+
+* proxy_checker_1
+> Simple Proxy List Checker written in Google's Go Language.
 
 * queue
 >Example of a simple Queue Server written in Golang. Also it is a good Example of a simple TCP Server.
