@@ -15,12 +15,14 @@
 		1.	username_clean 
 		
 				Reason:		depends on many RFCs and Restrictions of 
-							each particular Mail Server. Can not be done in 30 Minutes as suggested.
+							each particular Mail Server. Can not be done in 30 
+							Minutes as suggested.
 		
 		2.	username_check_syntax
 		
 				Reason:		depends on many RFCs and Restrictions of 
-							each particular Mail Server. Can not be done in 30 Minutes as suggested.
+							each particular Mail Server. Can not be done in 30 
+							Minutes as suggested.
 		
 		3.	address_check_access
 		
