@@ -238,55 +238,6 @@ func main() {
 		fmt.Println("Idle...") //
 	}
 
-	/*
-		// Create an Example of Data (2 Rows x 4 Columns).
-		// 1011
-		// 1101
-		data_useful = make(field_of_bits, 2)
-		for i = 0; i <= 1; i++ {
-			data_useful[i] = make(row_of_bits, 4)
-			for j = 0; j <= 3; j++ {
-				data_useful[i][j] = EMPTY
-			}
-		}
-		for i = 0; i <= 1; i++ {
-			for j = 0; j <= 3; j++ {
-				data_useful[i][j] = FILLED
-			}
-		}
-		data_useful[0][1] = EMPTY
-		data_useful[1][2] = EMPTY
-
-		data_message_1, ec_1 = pack_data_f1(8, 4, 2, data_useful)
-		data_1, ge_1 = get_data_f1(48, 8, 6, data_message_1)
-		ba_1, eba_1 = field_to_bytes(48, 8, 6, data_message_1)
-
-		data_message_2, ec_2 = pack_data_f2(8, 4, 2, data_useful)
-		data_2, ge_2 = get_data_f2(120, 12, 10, data_message_2)
-		ba_2, eba_2 = field_to_bytes(120, 12, 10, data_message_2)
-
-		// Output.
-		fmt.Println(data_useful)
-		fmt.Println()
-
-		fmt.Println(data_message_1)
-		fmt.Println(ec_1)
-		fmt.Println(data_1)
-		fmt.Println(ge_1)
-		fmt.Println(ba_1)
-		fmt.Println(eba_1)
-		fmt.Println(data_1_r)
-		fmt.Println(er_1)
-		fmt.Println()
-
-		fmt.Println(data_message_2)
-		fmt.Println(ec_2)
-		fmt.Println(data_2)
-		fmt.Println(ge_2)
-		fmt.Println(ba_2)
-		fmt.Println(eba_2)
-		fmt.Println()
-	*/
 }
 
 //==============================================================================
