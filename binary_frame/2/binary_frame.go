@@ -4,22 +4,24 @@
 
 	Binary Frame Tool.
 
-	Version: 0.1.
+	Version: 0.1.1.
 	Date of Creation: 2018-01-28.
 	Author: McArcher.
 
 	This is a simple Tool which draws a binary Frame around the Content.
 	A Frame consists of logical Ones (1) and has a Spacer of Zeroes (0).
 
-	So, "XXX":
+	So,
 	---
+	XXX
 	XXX
 	---
 
-	Becomes something with a binary Frame:
+	Becomes something with a binary Frame with a Spacer:
 	-------
 	1111111
 	1000001
+	10XXX01
 	10XXX01
 	1000001
 	1111111
@@ -69,6 +71,8 @@ const ACTION_ENCODE_F2 = 2
 const ACTION_DECODE_F1 = 3
 const ACTION_DECODE_F2 = 4
 
+const ERROR_1 = 1
+
 //==============================================================================
 
 var cla_file_in *string
@@ -115,17 +119,14 @@ func main() {
 	// Check X & Y.
 	if file_input_x <= 0 {
 		fmt.Println("Bad X Size.")
-		return
+		os.Exit(ERROR_1)
 	}
 	file_input_cols = file_input_x
 	if (input_field_size % file_input_x) != 0 {
 		fmt.Println("Bad X Size.")
-		return
+		os.Exit(ERROR_1)
 	}
 	file_input_rows = input_field_size / file_input_x
-
-	fmt.Println("Input Data (WxH):", file_input_cols, "x", file_input_rows,
-		".") ///
 
 	// Do Action.
 	if action_type == ACTION_ENCODE_F1 {
@@ -135,6 +136,12 @@ func main() {
 		file_output_cols = file_input_cols + 4
 		file_output_rows = file_input_rows + 4
 		output_field_size = file_output_cols * file_output_rows
+
+		// Report.
+		fmt.Println("Input Data (WxH):", file_input_cols, "x", file_input_rows,
+			".") ///
+		fmt.Println("Output Data (WxH):", file_output_cols, "x",
+			file_output_rows, ".") ///
 
 		// Bytes -> Field.
 		field, ok = bytes_to_field(input_field_size, file_input_cols,
@@ -146,8 +153,7 @@ func main() {
 		check_err_code(err_code)
 		// Frame -> Bytes.
 		file_output_content, ok = field_to_bytes(output_field_size,
-			file_output_cols, file_output_rows,
-			field_framed)
+			file_output_cols, file_output_rows, field_framed)
 		check_ok(ok)
 		// Bytes -> File.
 		fmt.Println("Writing \"" + file_output_path + "\"...") //
@@ -162,6 +168,12 @@ func main() {
 		file_output_cols = file_input_cols + 8
 		file_output_rows = file_input_rows + 8
 		output_field_size = file_output_cols * file_output_rows
+
+		// Report.
+		fmt.Println("Input Data (WxH):", file_input_cols, "x", file_input_rows,
+			".") ///
+		fmt.Println("Output Data (WxH):", file_output_cols, "x",
+			file_output_rows, ".") ///
 
 		// Bytes -> Field.
 		field, ok = bytes_to_field(input_field_size, file_input_cols,
@@ -190,6 +202,12 @@ func main() {
 		file_output_rows = file_input_rows - 4
 		output_field_size = file_output_cols * file_output_rows
 
+		// Report.
+		fmt.Println("Input Data (WxH):", file_input_cols, "x", file_input_rows,
+			".") ///
+		fmt.Println("Output Data (WxH):", file_output_cols, "x",
+			file_output_rows, ".") ///
+
 		// Bytes -> Frame.
 		field_framed, ok = bytes_to_field(input_field_size, file_input_cols,
 			file_input_rows, file_input_content)
@@ -215,6 +233,12 @@ func main() {
 		file_output_cols = file_input_cols - 8
 		file_output_rows = file_input_rows - 8
 		output_field_size = file_output_cols * file_output_rows
+
+		// Report.
+		fmt.Println("Input Data (WxH):", file_input_cols, "x", file_input_rows,
+			".") ///
+		fmt.Println("Output Data (WxH):", file_output_cols, "x",
+			file_output_rows, ".") ///
 
 		// Bytes -> Frame.
 		field_framed, ok = bytes_to_field(input_field_size, file_input_cols,
@@ -915,6 +939,9 @@ func field_to_bytes(
 	const ERROR_ALL_CLEAR = true // No Error.
 	const ERROR = false
 
+	const MSG_1 = "Warning ! The Size of the Output Data can not be stored " +
+		"using 8-Bit Bytes ! The Size is not a Multiple of 8 !"
+
 	var i uint64
 	var j uint64
 
@@ -936,17 +963,21 @@ func field_to_bytes(
 	// Check Input Data.
 	field_bits_count_required = field_columns_count * field_rows_count
 	if field_bits_count != field_bits_count_required {
+		log.Println("1")
 		return nil, ERROR
 	}
 	if field_columns_count > field_columns_count_limit {
+		log.Println("2")
 		return nil, ERROR
 	}
 	if field_rows_count > field_rows_count_limit {
+		log.Println("3")
 		return nil, ERROR
 	}
 
 	// Can be converted to Bytes ?
 	if (field_bits_count % bits_in_byte) != 0 {
+		fmt.Println(MSG_1)
 		return nil, ERROR
 	}
 
@@ -1130,7 +1161,7 @@ func check_error(err error) {
 
 	if err != nil {
 		log.Println(err)
-		os.Exit(1)
+		os.Exit(ERROR_1)
 	}
 }
 
@@ -1140,7 +1171,7 @@ func check_ok(ok bool) {
 
 	if !ok {
 		log.Println("Error.")
-		os.Exit(1)
+		os.Exit(ERROR_1)
 	} else {
 		//fmt.Println("OK.")
 	}
@@ -1154,7 +1185,7 @@ func check_err_code(err_code uint8) {
 		//fmt.Println("OK.")
 	} else {
 		log.Println("Error.")
-		os.Exit(1)
+		os.Exit(ERROR_1)
 	}
 }
 
