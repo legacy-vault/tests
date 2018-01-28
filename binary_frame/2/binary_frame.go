@@ -32,7 +32,7 @@
 	with a great Chances for Signal Corruption. Even when damaged, a Frame or
 	Remains of a Frame may help a lot in the Process of Data Recovery. This
 	Frame may be used as a Transport Package when there is no Package of the
-	Transmisison Protocol, and may be used in a universal Range.
+	Transmission Protocol, and may be used in a universal Range.
 
 	To comply with this-day Computers, the Algorithm makes Sizes compatible
 	with 8-Bit Bytes, but it is also able to use any Size you want.
