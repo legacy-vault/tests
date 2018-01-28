@@ -1,0 +1,3 @@
+./2 -h
+./2 -fi sample.txt -fo framed.txt -a e1 -x 16
+./2 -fi framed.txt -fo data.txt -a d1 -x 20
