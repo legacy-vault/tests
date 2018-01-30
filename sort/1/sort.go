@@ -6,7 +6,7 @@
 
 	Methods compared:
 
-		- built-in Golang's "sort.Int" Function;
+		- built-in Golang's "sort.Ints" Function;
 		- modified "Quick Sort" where Pivot is at right Edge;
 		- standard "Quick Sort" where Pivot is in the Middle of Array.
 
