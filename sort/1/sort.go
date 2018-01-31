@@ -41,7 +41,7 @@ func main() {
 
 	arr_len = 1000 * 1000 * 10 // 10 Millions.
 
-	// Create Array of random UInt32.
+	// Create Array of random int.
 	arr = make([]int, arr_len)
 	for i = 0; i < arr_len; i++ {
 		arr[i] = rand.Int()
