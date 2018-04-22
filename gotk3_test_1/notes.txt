@@ -1,0 +1,32 @@
+//============================================================================//
+//																			  //
+//	Notes about the Program.												  //
+//																			  //
+//============================================================================//
+
+1.	The Coding style is not usual, not as in popular Go programming Language.
+	
+	Most Parts of the Code have Comments providing easy Code Reading and 
+	Understanding. 
+	
+	Functions are separated between each other with a Line.
+	
+	Function Names use 'Underscore' Symbols as in good old C programming 
+	Language. Such an Approach makes it easy to distinguish Function from other 
+	Identifiers (such as Variables, Constants, ...).
+	
+	Variables' Names use 'CamelCase' combining small and capital Letters.
+	
+	Inside the Functions, all the Variables used are declared at the top Part of 
+	the Function Code and are sorted alphabetically. As opposed to usual Go 
+	Coding Style with fast Declarations using the ':=' which make a Mess, my 
+	Approach makes it very easy and fast to find any of the used Variables in 
+	just a few Seconds without scrolling all the Function's Code.
+
+//============================================================================//
+
+2.	Seems like the 'gotk3' Library (and GTK itself) is not compatible with 
+	multiple Threads. The graphical Interfaces crashes randomly in any part of 
+	the Code ever possible.
+
+//============================================================================//
