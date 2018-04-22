@@ -43,8 +43,8 @@ func CalculateSumStringHex(filePath string) (string, error) {
 
 	var crcSum uint64
 	var crcTable *crc64.Table
-	var fileData []byte
 	var err error
+	var fileData []byte
 	var result string
 
 	result = ""
