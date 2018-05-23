@@ -1,0 +1,17 @@
+To compile this in CodeBlocks:
+
+1. Open "Project -> Build options...".
+
+2. Select main Project in left Column, not a 'Debug' or 'Release'.
+
+3. In "Compiler Settings -> Compiler Flags" set:
+	*	"-Wall" and other usefull Warnings as "-Wextra" and "-pedantic";
+	*	"-std=c++11".
+
+4. In "Compiler Settings -> Other compiler options" add new Line:
+	*	"-pthread".
+
+5. In "Linker Settings -> Other linker options" add new Line:
+	*	"-lpthread".
+
+6. Do not forget to rebuild all.
