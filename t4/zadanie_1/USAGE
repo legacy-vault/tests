@@ -1,0 +1,4 @@
+cd <this_directory>
+./compile.sh
+./fp_generator
+./fp_sorter data_src.txt data_dst.txt
