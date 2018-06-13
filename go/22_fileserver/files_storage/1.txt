@@ -1,0 +1,1 @@
+Contents of the '1.txt' File.
