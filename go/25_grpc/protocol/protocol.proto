@@ -1,0 +1,30 @@
+// protocol.proto.
+
+syntax = "proto3";
+
+package demo;
+
+service DemoService {
+
+    // Returns the Square of a Number.
+    rpc GetSquare (Data1) returns (Data2) {}
+
+    // Returns the Sum of Numbers in a Stream.
+    rpc GetSum (stream Data1) returns (Data2) {}
+
+    // Reaturns a Stream (List) of natural Numbers.
+    rpc ListNaturalNumbers (Data3) returns (stream Data2) {}
+}
+
+message Data1 {
+    int32 Value = 1;
+}
+
+message Data2 {
+    int64 Value = 1;
+}
+
+message Data3 {
+    int64 FirstValue = 1;
+    int64 LastValue = 2;
+}
