@@ -17,10 +17,10 @@ func main() {
 	const ExchangeName = "x1"
 
 	var channel *amqp.Channel
+	var closedQueues chan string
+	var closedQueuesChanSize uint64
 	var conn *amqp.Connection
 	var err error
-	var failedQueues chan string
-	var failedQueuesChanSize uint64
 	var msg amqp.Publishing
 	var msgBA []byte
 	var msgStr string
@@ -66,10 +66,10 @@ func main() {
 	go sentMessagesHandler(sentMessages)
 
 	// 3. Handler for Queues which have been closed.
-	failedQueuesChanSize = 100
-	failedQueues = make(chan string, failedQueuesChanSize)
-	failedQueues = channel.NotifyCancel(failedQueues)
-	go closedQueuesHandler(failedQueues)
+	closedQueuesChanSize = 100
+	closedQueues = make(chan string, closedQueuesChanSize)
+	closedQueues = channel.NotifyCancel(closedQueues)
+	go closedQueuesHandler(closedQueues)
 
 	quitChan = make(chan bool)
 
