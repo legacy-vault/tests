@@ -1,0 +1,21 @@
+------------------------
+Block C.R.C. Check Tool.
+Notes.
+------------------------
+
+1.	Block's Double CheckSum Error may mean one of the following:
+	-	Both Block CheckSums are good, but Data File Block is corrupted;
+	-	Data File Block is good, but both Block CheckSums are corrupted;
+	-	Everything is corrupted: Data File Block and Block's both CheckSums.
+	
+	If further Blocks contain Sliding Block CheckSum Error, then this often
+	means the Data File Block Corruption. If there are no further Sliding Block
+	CheckSum Errors, then it often means that Data File Block is good and the
+	Error may be in the CheckSum.
+
+2.	Single Current Block's CheckSum Error, if it is not followed by Errors
+	in further Blocks, often means corrupted Current Block's CheckSum.
+
+3.	Single Sliding Block's CheckSum Error, if it is not followed by Errors
+	in further Blocks, often means corrupted Sliding Block's CheckSum.
+------------------------
