@@ -1,0 +1,9 @@
+-----------
+DESCRIPTION
+-----------
+
+This is a test Program written in Go programming Language.
+It can read input text Data from Standard Input Stream ('stdin').
+Each Line of the text Data is treated as an URL of a Web Page.
+Each Web Page is fetched and analyzed according to the Task.
+More Details can be found in the Task File.

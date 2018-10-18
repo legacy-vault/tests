@@ -1,0 +1,13 @@
+-----
+USAGE
+-----
+
+Run with '-h' Command Line Argument to list all possible Command Line Arguments.
+
+The most convenient Way to run this Program is to use UNIX Pipeline.
+Use 'cat' or 'echo' Commands' Output and direct it into this Program.
+
+E.g.
+----------------------------
+cat ./data/lines.txt | ./exe
+----------------------------
