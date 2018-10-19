@@ -121,7 +121,7 @@ func stdinReader(app *Application) error {
 			}
 
 		default:
-			// Do Nothing.
+			// Do Nothing => Proceed to Stream Reading.
 		}
 	}
 
