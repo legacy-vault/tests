@@ -1,0 +1,19 @@
+# Git Strangeness.
+#
+# Sometimes 'git' shows unexpected Surprises.
+# For Example, it may show a List of 'Changes not staged for commit',
+# which consists of old deleted Files, which were moved to another
+# Folder. To delete these Files we can use a following Trick.
+
+# Enlist the Files.
+git status | grep deleted | sed 's#^.*:##' > /tmp/1.txt
+
+# Check the List, modify it and save it to '2.txt'.
+#...
+
+# Remove the Files.
+git rm --cached `cat /tmp/2.txt`
+
+# Commit Changes and push to the Repository.
+git commit -m "Files Move"
+git push
