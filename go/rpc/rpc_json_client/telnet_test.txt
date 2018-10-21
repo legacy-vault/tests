@@ -1,0 +1,13 @@
+telnet localhost 3000
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+{
+"jsonrpc":"2.0", 
+"method":"Arithmetic.Multiply", 
+"params": [ { "A": 5, "B": 6 } ],
+"id":1
+}
+{"id":1,"result":30,"error":null}
+exit
+Connection closed by foreign host.

@@ -1,0 +1,11 @@
+This Program uses my own "Shared" Mutex, or an "Read-Write" Mutex, as it is 
+known in some other Places.
+
+The Task is described in the 'TASK' File.
+
+Sample Usage is described in the 'USAGE' File.
+
+Compiled and tested on Ubuntu 18.04 with GCC 7.3.0.
+
+Author: McArcher.
+Date: 2018-06-03.

@@ -1,0 +1,15 @@
+-----
+Help:
+-----
+./2 -h
+
+-------------
+Common Usage:
+-------------
+./2 -fi sample.txt -fo framed.txt -a e1 -x 16
+./2 -fi framed.txt -fo data.txt -a d1 -x 20
+
+----------------------------------------------------------
+Example of Data which can not be stored using 8-Bit Bytes:
+----------------------------------------------------------
+./2 -fi sample_2.jpg -fo test.jpg.bf -a e1 -x 8
