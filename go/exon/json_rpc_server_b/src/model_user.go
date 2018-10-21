@@ -1,6 +1,6 @@
 // model_user.go
 
-// Version: 0.1.
+// Version: 0.2.
 // Date: 2017-07-06.
 // Author: McArcher.
 
@@ -10,6 +10,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -25,11 +27,27 @@ type UserModel struct {
 
 type UsersModel map[uint64]UserModel
 
+type LoginsMapType map[string]uint64 // Map of 'login' Fields
+// Key is 'login'.
+// Value is UUID.
+
+type UsersIntegrityCheckType struct {
+	StageOneEnabled   bool
+	StageTwoEnabled   bool
+	StageThreeEnabled bool
+	ShowStages        bool
+}
+
 //------------------------------------------------------------------------------
 // Variables
 //------------------------------------------------------------------------------
 
 var Users UsersModel
+var LoginsMap LoginsMapType
+
+var UsersAccess sync.RWMutex
+
+var UsersIntegrityCheck UsersIntegrityCheckType
 
 //------------------------------------------------------------------------------
 // Methods
@@ -64,6 +82,12 @@ func (users *UsersModel) Add(user UserModel) (bool, error) {
 	var ret_err error
 
 	error_msg = ""
+
+	//================================================
+	// DEBUG
+	//================================================
+	debug_add_runs++ // dbg
+	//================================================
 
 	// Check for empty 'UUID'.
 	uuid = user.uuid
@@ -139,7 +163,9 @@ func (users *UsersModel) Add(user UserModel) (bool, error) {
 		tmp_user.uuid = uuid
 
 		// Add User from temporary Object.
+		UsersAccess.Lock()
 		(*users)[uuid] = *tmp_user
+		UsersAccess.Unlock()
 
 	} else {
 
@@ -147,8 +173,13 @@ func (users *UsersModel) Add(user UserModel) (bool, error) {
 		// Use it.
 
 		// Add User from Parameter.
+		UsersAccess.Lock()
 		(*users)[uuid] = user
+		UsersAccess.Unlock()
 	}
+
+	// Add 'login' to LoginsMap
+	LoginsMap[login] = uuid
 
 	return true, nil
 }
@@ -173,7 +204,9 @@ func (users *UsersModel) AddAsRequest(user UserModel) (bool, error) {
 	}
 
 	// Save changes in Delta Map
+	AddedUsersMapAccess.Lock()
 	AddedUsersMap[user.uuid] = true
+	AddedUsersMapAccess.Unlock()
 
 	return true, nil
 }
@@ -184,6 +217,7 @@ func (users *UsersModel) CheckIntegrity() (bool, error) {
 
 	// Checks the Integrity of all Elements in the List.
 	// This Function is used for testing Purposes.
+	// Returns TRUE if Check is successful.
 
 	var cur_user, cur_user_2 UserModel
 	var cur_index uint64
@@ -198,6 +232,10 @@ func (users *UsersModel) CheckIntegrity() (bool, error) {
 	var loginsLengthIsGood bool
 	var errorIsFound bool
 	var count uint64
+	var msg_welcome, msg_stage_1, msg_stage_2, msg_stage_3, msg_success string
+	var msg_done, msg_skipped string
+	var recnum, cur_rec int // Number of all Records (Users)  & current one
+	var rec_interval int
 
 	var error_msg string
 	var ret_err error
@@ -206,97 +244,165 @@ func (users *UsersModel) CheckIntegrity() (bool, error) {
 	errorIsFound = false
 	err_log = ""
 
+	recnum = len(*users)
+	msg_welcome = "Integrity Check DataBase (" + strconv.Itoa(recnum) + " Records)."
+	msg_stage_1 = "Integrity Check : Stage I. "
+	msg_stage_2 = "Integrity Check : Stage II. "
+	msg_stage_3 = "Integrity Check : Stage III. "
+	msg_success = "No Errors were found."
+	msg_done = "[DONE]"
+	msg_skipped = "[SKIPPED]"
+	fmt.Println(msg_welcome) //
+	rec_interval = 10 * 1000 // Information Update Interval (Number of Records)
+	rec_interval++           //////////////////
+
+	UsersAccess.RLock()
+
 	// 1. Basic Checks.
+	if UsersIntegrityCheck.ShowStages {
+		fmt.Print(msg_stage_1) //
+	}
+	if UsersIntegrityCheck.StageOneEnabled {
 
-	for cur_index, cur_user = range *users {
+		for cur_index, cur_user = range *users {
 
-		// Read current User.
-		cur_uuid = cur_user.uuid
-		cur_login = cur_user.login
-		cur_regDate = cur_user.regDate
+			// Read current User.
+			cur_uuid = cur_user.uuid
+			cur_login = cur_user.login
+			cur_regDate = cur_user.regDate
 
-		// Check Integrity of Index.
-		indexIsBad = (cur_index != cur_uuid)
-		if indexIsBad {
+			// Check Integrity of Index.
+			indexIsBad = (cur_index != cur_uuid)
+			if indexIsBad {
 
-			err_log = err_log + fmt.Sprintf("Bad Index [%d].", cur_index)
-			errorIsFound = true
+				err_log = err_log + fmt.Sprintf("Bad Index [%d].", cur_index)
+				errorIsFound = true
+			}
+
+			// Check for empty UUID.
+			uuidIsBad = (cur_uuid == 0)
+			if uuidIsBad {
+
+				err_log = err_log + fmt.Sprintf("Bad UUID [%d].", cur_uuid)
+				errorIsFound = true
+			}
+
+			// Check for empty login.
+			loginIsBad = (cur_login == "")
+			if loginIsBad {
+
+				err_log = err_log + fmt.Sprintf("Bad login [%s].", cur_login)
+				errorIsFound = true
+			}
+
+			// Check for empty regDate.
+			regDateIsBad = (cur_regDate == 0)
+			if regDateIsBad {
+
+				err_log = err_log + fmt.Sprintf("Bad regDate [%d].", cur_regDate)
+				errorIsFound = true
+			}
+
+			// Check 'login' Length
+			loginsLengthIsGood = users.LoginLengthIsGood(&cur_login)
+			if !loginsLengthIsGood {
+
+				err_log = err_log + fmt.Sprintf("Too long login [%s].", cur_login)
+				errorIsFound = true
+			}
+		}
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_done) //
 		}
 
-		// Check for empty UUID.
-		uuidIsBad = (cur_uuid == 0)
-		if uuidIsBad {
+	} else {
 
-			err_log = err_log + fmt.Sprintf("Bad UUID [%d].", cur_uuid)
-			errorIsFound = true
-		}
-
-		// Check for empty login.
-		loginIsBad = (cur_login == "")
-		if loginIsBad {
-
-			err_log = err_log + fmt.Sprintf("Bad login [%s].", cur_login)
-			errorIsFound = true
-		}
-
-		// Check for empty regDate.
-		regDateIsBad = (cur_regDate == 0)
-		if regDateIsBad {
-
-			err_log = err_log + fmt.Sprintf("Bad regDate [%d].", cur_regDate)
-			errorIsFound = true
-		}
-
-		// Check 'login' Length
-		loginsLengthIsGood = users.LoginLengthIsGood(&cur_login)
-		if !loginsLengthIsGood {
-
-			err_log = err_log + fmt.Sprintf("Too long login [%s].", cur_login)
-			errorIsFound = true
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_skipped) //
 		}
 	}
 
 	// 2. Check duplicate UUIDs.
-	for _, cur_user = range *users {
+	if UsersIntegrityCheck.ShowStages {
+		fmt.Print(msg_stage_2) //
+	}
+	if UsersIntegrityCheck.StageTwoEnabled {
 
-		cur_uuid = cur_user.uuid
-		count = 0
+		cur_rec = 1
+		for _, cur_user = range *users {
 
-		for _, cur_user_2 = range *users {
-
-			cur_uuid_2 = cur_user_2.uuid
-			if cur_uuid_2 == cur_uuid {
-				count++
+			// Show Progress
+			if cur_rec%rec_interval == 0 {
+				fmt.Print(".") //
 			}
+
+			cur_uuid = cur_user.uuid
+			count = 0
+
+			for _, cur_user_2 = range *users {
+
+				cur_uuid_2 = cur_user_2.uuid
+				if cur_uuid_2 == cur_uuid {
+					count++
+				}
+			}
+
+			if count != 1 {
+
+				err_log = err_log + fmt.Sprintf("UUID [%d] is found [%d] Times in List.", cur_uuid, count)
+				errorIsFound = true
+			}
+
+			cur_rec++
+		}
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_done) //
 		}
 
-		if count != 1 {
+	} else {
 
-			err_log = err_log + fmt.Sprintf("UUID [%d] is found [%d] Times in List.", cur_uuid, count)
-			errorIsFound = true
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_skipped) //
 		}
 	}
 
 	// 3. Check duplicate logins.
-	for _, cur_user = range *users {
+	if UsersIntegrityCheck.ShowStages {
+		fmt.Print(msg_stage_3) //
+	}
+	if UsersIntegrityCheck.StageThreeEnabled {
 
-		cur_login = cur_user.login
-		count = 0
+		for _, cur_user = range *users {
 
-		for _, cur_user_2 = range *users {
+			cur_login = cur_user.login
+			count = 0
 
-			cur_login_2 = cur_user_2.login
-			if cur_login_2 == cur_login {
-				count++
+			for _, cur_user_2 = range *users {
+
+				cur_login_2 = cur_user_2.login
+				if cur_login_2 == cur_login {
+					count++
+				}
+			}
+
+			if count != 1 {
+
+				err_log = err_log + fmt.Sprintf("login [%s] is found [%d] Times in List.", cur_login, count)
+				errorIsFound = true
 			}
 		}
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_done) //
+		}
 
-		if count != 1 {
+	} else {
 
-			err_log = err_log + fmt.Sprintf("login [%s] is found [%d] Times in List.", cur_login, count)
-			errorIsFound = true
+		if UsersIntegrityCheck.ShowStages {
+			fmt.Println(msg_skipped) //
 		}
 	}
+
+	UsersAccess.RUnlock()
 
 	// Summary.
 	if errorIsFound {
@@ -307,6 +413,8 @@ func (users *UsersModel) CheckIntegrity() (bool, error) {
 
 		return false, ret_err
 	}
+
+	fmt.Println(msg_success) //
 
 	return true, nil
 
@@ -356,7 +464,9 @@ func (users *UsersModel) Get(user UserModel, reply *UserModel) (bool, error) {
 		}
 
 		// UUID is set & exists.
+		UsersAccess.RLock()
 		*reply = (*users)[uuid]
+		UsersAccess.RUnlock()
 
 		return true, nil
 	}
@@ -389,7 +499,9 @@ func (users *UsersModel) Get(user UserModel, reply *UserModel) (bool, error) {
 
 			return false, ret_err
 		}
+		UsersAccess.RLock()
 		*reply = (*users)[uuidByLogin]
+		UsersAccess.RUnlock()
 
 		return true, nil
 	}
@@ -414,10 +526,11 @@ func (users *UsersModel) GetUUIDbyLogin(login string, uuid *uint64) (bool, error
 	//		- 'login' is not found.
 
 	var loginIsEmpty bool
-	var cur_user UserModel
-	var cur_login string
-	var cur_uuid uint64
-	var loginIsFound bool
+	//var cur_user UserModel
+	//var cur_login string
+	//var cur_uuid uint64
+	//var loginIsFound bool
+	var loginExists bool
 
 	var error_msg string
 	var ret_err error
@@ -433,19 +546,30 @@ func (users *UsersModel) GetUUIDbyLogin(login string, uuid *uint64) (bool, error
 		return false, ret_err
 	}
 
-	// Search for 'login'.
-	for cur_uuid, cur_user = range *users {
+	/*
+		// Search for 'login'.
+		for cur_uuid, cur_user = range *users {
 
-		cur_login = cur_user.login
-		loginIsFound = (cur_login == login)
+			cur_login = cur_user.login
+			loginIsFound = (cur_login == login)
 
-		// 'login' is found.
-		if loginIsFound {
+			// 'login' is found.
+			if loginIsFound {
 
-			*uuid = cur_uuid
+				*uuid = cur_uuid
 
-			return true, nil
+				return true, nil
+			}
 		}
+	*/
+
+	_, loginExists = LoginsMap[login]
+
+	if loginExists {
+
+		*uuid = LoginsMap[login]
+
+		return true, nil
 	}
 
 	// 'login' is not found.
@@ -463,8 +587,16 @@ func (users *UsersModel) Init() {
 
 	// Initializes the List.
 
-	//*users = make(map[uint64]UserModel)
+	UsersAccess.Lock()
 	*users = make(UsersModel)
+	UsersAccess.Unlock()
+
+	LoginsMap = make(LoginsMapType)
+
+	UsersIntegrityCheck.StageOneEnabled = true
+	UsersIntegrityCheck.StageTwoEnabled = false
+	UsersIntegrityCheck.StageThreeEnabled = false
+	UsersIntegrityCheck.ShowStages = true
 }
 
 //------------------------------------------------------------------------------
@@ -520,23 +652,45 @@ func (users *UsersModel) Load() (bool, error) {
 
 //------------------------------------------------------------------------------
 
+func (users *UsersModel) LoginIsBusy(login string) bool {
+
+	// Checks if the specified 'login' is already taken.
+
+	var loginExists bool
+
+	_, loginExists = LoginsMap[login]
+
+	return loginExists
+}
+
+//------------------------------------------------------------------------------
+
 func (users *UsersModel) LoginIsFree(login string) bool {
 
 	// Checks if the specified 'login' is not used in the List.
 
-	var cur_user UserModel
-	var cur_login string
+	//var cur_user UserModel
+	//var cur_login string
 	var loginExists bool
 
-	for _, cur_user = range *users {
+	/*
+		for _, cur_user = range *users {
 
-		cur_login = cur_user.login
-		loginExists = (cur_login == login)
+			cur_login = cur_user.login
+			loginExists = (cur_login == login)
 
-		if loginExists {
+			if loginExists {
 
-			return false
+				return false
+			}
 		}
+	*/
+
+	_, loginExists = LoginsMap[login]
+
+	if loginExists {
+
+		return false
 	}
 
 	return true
@@ -578,9 +732,11 @@ func (users *UsersModel) Modify(user UserModel) (bool, error) {
 	var uuidByLogin uint64
 
 	var login string
+	var login_old string
 	var loginIsEmpty bool
 	var loginIsBusy bool
 	var loginOwnerIsNotUs bool
+	var loginHasChanged bool
 
 	var regDate int64
 	var regDateIsEmpty bool
@@ -649,6 +805,12 @@ func (users *UsersModel) Modify(user UserModel) (bool, error) {
 		}
 	}
 
+	// Save previous 'login' & analyze it
+	UsersAccess.RLock()
+	login_old = (*users)[uuid].login
+	UsersAccess.RUnlock()
+	loginHasChanged = (login_old != login)
+
 	// 3. Check for empty regDate.
 	regDateIsEmpty = (regDate == 0)
 	if regDateIsEmpty {
@@ -665,7 +827,9 @@ func (users *UsersModel) Modify(user UserModel) (bool, error) {
 		tmp_user.uuid = uuid
 
 		// Modify User from temporary Object.
+		UsersAccess.Lock()
 		(*users)[uuid] = *tmp_user
+		UsersAccess.Unlock()
 
 	} else {
 
@@ -673,7 +837,17 @@ func (users *UsersModel) Modify(user UserModel) (bool, error) {
 		// Use it.
 
 		// Modify User from Parameter.
+		UsersAccess.Lock()
 		(*users)[uuid] = user
+		UsersAccess.Unlock()
+	}
+
+	// Modify 'login' in LoginsMap if it has changed
+	if loginHasChanged {
+		// Delete old Mapping
+		delete(LoginsMap, login_old)
+		// Create new Mapping
+		LoginsMap[login] = uuid
 	}
 
 	return true, nil
@@ -699,7 +873,9 @@ func (users *UsersModel) ModifyAsRequest(user UserModel) (bool, error) {
 	}
 
 	// Save changes in Delta Map
+	ModifiedUsersMapAccess.Lock()
 	ModifiedUsersMap[user.uuid] = true
+	ModifiedUsersMapAccess.Unlock()
 
 	return true, nil
 }
@@ -846,7 +1022,9 @@ func (users *UsersModel) UUIDexists(uuid uint64) bool {
 
 	var exists bool
 
+	UsersAccess.RLock()
 	_, exists = (*users)[uuid]
+	UsersAccess.RUnlock()
 
 	return exists
 }
@@ -863,10 +1041,12 @@ func (users *UsersModel) debug_Print() {
 	fmt.Println("Users List.")                           //dbg
 	fmt.Println("-------------------------------------") //dbg
 
+	UsersAccess.RLock()
 	for _, cur_user = range *users {
 
 		cur_user.debug_Print() //dbg
 	}
+	UsersAccess.RUnlock()
 
 	fmt.Println("-------------------------------------") //dbg
 }
@@ -879,6 +1059,29 @@ func (user *UserModel) debug_Print() {
 	// This Function is used for testing Purposes.
 
 	fmt.Printf("User [%d][%d][%s].\r\n", user.uuid, user.regDate, user.login) //dbg
+}
+
+//------------------------------------------------------------------------------
+
+func debug_PrintLoginsMap() {
+
+	// Prints LoginsMap.
+	// This Function is used for testing Purposes.
+
+	var cur_uuid uint64
+	var cur_login string
+
+	fmt.Println("LoginsMap")                             //dbg
+	fmt.Println("-------------------------------------") //dbg
+	fmt.Println(" [login] [UUID]")                       //dbg
+	fmt.Println("-------------------------------------") //dbg
+
+	for cur_login, cur_uuid = range LoginsMap {
+
+		fmt.Printf("[%s][%d].\r\n", cur_login, cur_uuid) //dbg
+	}
+
+	fmt.Println("-------------------------------------") //dbg
 }
 
 //------------------------------------------------------------------------------

@@ -1,0 +1,76 @@
+Hello. I have got a strange bug in Golang. 
+
+>OS: Linux Ubuntu 18.04.
+
+>CPU: AMD with 64 Bit Support.
+
+>IDE is Goland 2018.1.5.
+
+>Go version is 1.10.1.
+
+>Compiler is set to: 'Any'. 
+
+I have tried both 'gc' and 'gccgo' compilers. Result is the same.
+
+In the program below, Debugger shows strange things. The 'aUnion' variable has "John" inside it, but the 'aRecord' variable which has a Union type in it, has no "John" inside. 
+
+If i 'fmt.Printf' them, they are both there, but Debugger shows no John inside 'aRecord'.
+Is that a debugger's bug?
+
+The program is very simple. Just nested structs passed as a pointer.
+
+		// 33.go.
+
+		package main
+
+		import "fmt"
+
+		type Person struct {
+			Name string
+			Age  int
+		}
+		type GroupOfPeople struct {
+			Name   string
+			People []*Person
+		}
+		type Union struct {
+			ID    int
+			Group *GroupOfPeople
+		}
+		type Record struct {
+			UnionField *Union
+			Type       int
+		}
+
+		func main() {
+
+			var aPerson *Person
+			var people []*Person
+			var aGroup *GroupOfPeople
+			var aUnion *Union
+			var aRecord *Record
+
+			aPerson = &Person{
+				Name: "John",
+				Age:  10,
+			}
+			people = []*Person{aPerson}
+			aGroup = &GroupOfPeople{
+				Name:   "A Group",
+				People: people,
+			}
+			aUnion = &Union{
+				ID:    123,
+				Group: aGroup,
+			} // John is inside 'aUnion'.
+			aRecord = &Record{
+				UnionField: aUnion,
+				Type:       666,
+			}
+			// John is NOT inside 'aRecord'.
+			// WHY ?!
+			fmt.Printf("aUnion: %+v.\r\n", aUnion.Group.People[0])
+			fmt.Printf("aRecord: %+v.\r\n", aRecord.UnionField.Group.People[0])
+		}
+
+Thank you for help!

@@ -1,0 +1,5 @@
+IsAMemberOfIGCUno;uid;parent-uid;ParentDistanceKM;diameter_km;L.S.R.M.P.
+true;P-1;S-1;500;12;0.31
+false;P-2;S-1;650;8;0.37
+true;P-3;S-2;120;16;0.25
+true;P-4;S-2;180;14;0.42

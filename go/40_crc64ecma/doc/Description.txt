@@ -1,0 +1,12 @@
+-----------
+DESCRIPTION
+-----------
+
+This is a Program written in Go programming Language. 
+It can calculate CRC-64 Check Sums of Files.
+The 64-Bit Cyclic Redundancy Check Sum Calculation is done using the
+Polynomial Table provided by the European Computer Manufacturers Association 
+(ECMA).
+
+Notes:
+This Program can read only small Files which can be placed in the RAM.

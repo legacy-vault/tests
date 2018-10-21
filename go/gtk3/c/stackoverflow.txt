@@ -1,0 +1,113 @@
+Gtk-ERROR **: failed to add UI: The resource at “gui/gui.gresource” does not exist
+
+---
+
+Hello. 
+
+I am trying to load the GTK Resource in Golang. 
+I am using `gotk3` found at `github.com/gotk3/gotk3/gtk`. 
+
+I have created a simple GUI using `Glade` Tool. Saved it into `gui.glade` File. Created an XML to compile the Resource. Compiled the Resource. Then I give the string (Path to Resource) to the `gtk.BuilderNewFromResource` and it argues:
+
+>Gtk-ERROR **: failed to add UI: The resource at “gui/gui.gresource” does not exist
+
+The Structure of Files and Folders of the Project is such:
+
+        gtk.go
+        main.go
+        gui/compile.bash
+        gui/gui.glade
+        gui/gui.glade~
+        gui/gui.gresource
+        gui/gui.gresource.xml
+
+
+gui/compile.bash
+
+        #!/bin/bash
+        glib-compile-resources gui.gresource.xml
+
+gui.gresource.xml
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <gresources>
+        <gresource prefix="">
+            <file>gui.glade</file>
+        </gresource>
+        </gresources>
+
+gtk.go
+
+        // gtk.go
+
+        package main
+
+        import (
+            "log"
+
+            "github.com/gotk3/gotk3/gtk"
+        )
+
+
+        var gtkBuilder *gtk.Builder
+
+        var gtkBuilderPath string
+
+
+        func gtk_init() {
+
+            var err error
+
+            gtkBuilderPath = "gui/gui.gresource"
+
+            gtk.Init(nil)
+
+            gtkBuilder, err = gtk.BuilderNewFromResource(gtkBuilderPath)
+            gtk_check_creation("Builder", err)
+        }
+
+
+        func gtk_check_creation(objName string, err error) {
+
+            // Checks if the Object has been created.
+            // Prints fatal (final) Message on Error.
+
+            if err != nil {
+
+                log.Fatal("Error.", objName, "can not be created.", err) //
+            }
+        }
+
+
+I have tried to change the Prefix in `gui.gresource.xml` to "/gui" as in Tutorials, but it does not help. I think, the Prefix is relative to `gui.gresource.xml`, so that I do not need to set it as all the Resource Files are in the same Directory. Is it correct?
+
+Why an Error? What am I doing wrong?
+
+Thank you!
+
+---
+
+https://developer.gnome.org/gtk3/stable/GtkBuilder.html#gtk-builder-new-from-resource
+
+        gtk_builder_new_from_resource ()
+
+        GtkBuilder *
+        gtk_builder_new_from_resource (const gchar *resource_path);
+
+        Builds the GtkBuilder UI definition at resource_path .
+
+        If there is an error locating the resource or parsing the description, then the program will be aborted.
+        Parameters
+
+        resource_path
+            
+
+        a GResource resource path
+            
+        Returns
+
+        a GtkBuilder containing the described interface
+
+        Since: 3.10
+
+---
