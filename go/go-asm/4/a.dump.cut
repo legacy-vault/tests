@@ -1,0 +1,44 @@
+TEXT main.main(SB) /***/go-asm/4/a.go
+  a.go:7		0x4820f0		64488b0c25f8ffffff	MOVQ FS:0xfffffff8, CX			
+  a.go:7		0x4820f9		483b6110		CMPQ 0x10(CX), SP			
+  a.go:7		0x4820fd		0f86a3000000		JBE 0x4821a6				
+  a.go:7		0x482103		4883ec50		SUBQ $0x50, SP				
+  a.go:7		0x482107		48896c2448		MOVQ BP, 0x48(SP)			
+  a.go:7		0x48210c		488d6c2448		LEAQ 0x48(SP), BP			
+  a.go:7		0x482111		b801000000		MOVL $0x1, AX				
+  a.go:7		0x482116		31c9			XORL CX, CX				
+  a.go:18		0x482118		eb1a			JMP 0x482134				
+  a.go:19		0x48211a		488d5a01		LEAQ 0x1(DX), BX			
+  a.go:29		0x48211e		4801d1			ADDQ DX, CX				
+  a.go:29		0x482121		4889da			MOVQ BX, DX				
+  a.go:19		0x482124		4883fa09		CMPQ $0x9, DX				
+  a.go:19		0x482128		7ef0			JLE 0x48211a				
+  a.go:18		0x48212a		488d5001		LEAQ 0x1(AX), DX			
+  a.go:29		0x48212e		4801c1			ADDQ AX, CX				
+  a.go:29		0x482131		4889d0			MOVQ DX, AX				
+  a.go:18		0x482134		4883f805		CMPQ $0x5, AX				
+  a.go:18		0x482138		7f07			JG 0x482141				
+  a.go:18		0x48213a		ba01000000		MOVL $0x1, DX				
+  a.go:19		0x48213f		ebe3			JMP 0x482124				
+  a.go:25		0x482141		48894c2430		MOVQ CX, 0x30(SP)			
+  a.go:25		0x482146		0f57c0			XORPS X0, X0				
+  a.go:25		0x482149		0f11442438		MOVUPS X0, 0x38(SP)			
+  a.go:25		0x48214e		488d052b010100		LEAQ 0x1012b(IP), AX			
+  a.go:25		0x482155		48890424		MOVQ AX, 0(SP)				
+  a.go:25		0x482159		488d442430		LEAQ 0x30(SP), AX			
+  a.go:25		0x48215e		4889442408		MOVQ AX, 0x8(SP)			
+  a.go:25		0x482163		e8c899f8ff		CALL runtime.convT2E64(SB)		
+  a.go:25		0x482168		488b442410		MOVQ 0x10(SP), AX			
+  a.go:25		0x48216d		488b4c2418		MOVQ 0x18(SP), CX			
+  a.go:25		0x482172		4889442438		MOVQ AX, 0x38(SP)			
+  a.go:25		0x482177		48894c2440		MOVQ CX, 0x40(SP)			
+  a.go:25		0x48217c		488d442438		LEAQ 0x38(SP), AX			
+  a.go:25		0x482181		48890424		MOVQ AX, 0(SP)				
+  a.go:25		0x482185		48c744240801000000	MOVQ $0x1, 0x8(SP)			
+  a.go:25		0x48218e		48c744241001000000	MOVQ $0x1, 0x10(SP)			
+  a.go:25		0x482197		e8949dffff		CALL fmt.Println(SB)			
+  a.go:26		0x48219c		488b6c2448		MOVQ 0x48(SP), BP			
+  a.go:26		0x4821a1		4883c450		ADDQ $0x50, SP				
+  a.go:26		0x4821a5		c3			RET					
+  a.go:7		0x4821a6		e845a1fcff		CALL runtime.morestack_noctxt(SB)	
+  a.go:7		0x4821ab		e940ffffff		JMP main.main(SB)			
