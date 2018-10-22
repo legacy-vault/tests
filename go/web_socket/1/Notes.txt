@@ -1,0 +1,9 @@
+Notes.
+
+The Client must be run from the same Host Name as the WebSocket Server.
+I.e. if you run Server on 'localhost', you should put both Client's Files 
+('client.html' and 'a.js') to your local Web Server's public Folder and open it 
+via the Web Server (set URL as 'localhost/bla-bla-bla/client.html'), not just 
+from the Folder in File Manager. This should be done while the WebSocket Server 
+checks the Origin of the Request and throws a '403' Error if the Host Name is 
+wrong.
