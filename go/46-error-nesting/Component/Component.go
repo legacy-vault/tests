@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/legacy-vault/tests/go/46/Component/Error"
+	e "github.com/legacy-vault/tests/go/46-error-nesting/Component/Error"
 )
 
 type Component struct {
@@ -17,8 +17,8 @@ func (this *Component) Init() (err error) {
 	// Error Simulation.
 	internalError = sql.ErrNoRows
 	if internalError != nil {
-		err = New(
-			StageInitialization,
+		err = e.New(
+			e.StageInitialization,
 			internalError,
 		)
 		return
@@ -34,8 +34,8 @@ func (this *Component) Fin() (err error) {
 	// Error Simulation.
 	internalError = errors.New("The Computer has gone crazy")
 	if internalError != nil {
-		err = New(
-			StageFinalization,
+		err = e.New(
+			e.StageFinalization,
 			internalError,
 		)
 		return
