@@ -72,8 +72,6 @@ type Processor struct {
 
 	// The maximum Number of active Workers allowed.
 	workersCountLimit int
-	// The actual Number of active Workers.
-	workersCount int
 	// Economy Mode Indicator.
 	// When the Number of Tasks is less then the maximum allowed Workers Count,
 	// we are in the Economy Mode. As soon as we reach the maximum allowed
