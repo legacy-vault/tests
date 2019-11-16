@@ -37,10 +37,16 @@ import (
 	"time"
 )
 
-// Worker's Errors.
+// Worker's Errors & Messages.
 const (
-	ErrWorkerIsRunning       = "Worker is already running!"
-	ErrWorkerProcessorNotSet = "Worker's Processor is not set!"
+	ErrWorkerIsRunning           = "Worker is already running!"
+	ErrWorkerProcessorNotSet     = "Worker's Processor is not set!"
+	MsgWorkerTaskReportDelimiter = "..."
+)
+
+// Worker's Search Settings.
+const (
+	SearchPatternLowCase = "go"
 )
 
 // Worker is an Object which does the URL Procession Work.
@@ -49,7 +55,7 @@ type Worker struct {
 	// Guard against multiple Users.
 	lock sync.Mutex
 
-	// Unique Worker's ID. may be used for Logging and Inspection.
+	// Unique Worker's ID. May be used for Logging and Inspection.
 	id uint
 	// A Link to the Processor.
 	processor *Processor
@@ -139,15 +145,10 @@ func (w *Worker) makeAndProcessHttpRequest(
 	urlAddress string,
 ) (numberOfGoStrings int, err error) {
 
-	const (
-		patternLowCase = "go"
-	)
-
 	var httpResponse *http.Response
 	var httpResponseBody []byte
 
 	// Try to make the HTTP GET Request.
-	// Do not quit on Error.
 	httpResponse, err = httpClient.Get(urlAddress)
 	if err != nil {
 		return
@@ -170,13 +171,14 @@ func (w *Worker) makeAndProcessHttpRequest(
 	// Count the Pattern String in the HTTP Response Body.
 	numberOfGoStrings = w.countPatternStringInHttpBody(
 		httpResponseBody,
-		patternLowCase,
+		SearchPatternLowCase,
 	)
-	fmt.Println(urlAddress, "...", numberOfGoStrings)
+	fmt.Println(urlAddress, MsgWorkerTaskReportDelimiter, numberOfGoStrings)
 	return
 }
 
 // Counts the Pattern String in the HTTP Body.
+// Uses the low Case Strings Comparison.
 func (w *Worker) countPatternStringInHttpBody(
 	httpResponseBody []byte,
 	patternLowCase string,
@@ -192,7 +194,7 @@ func (w *Worker) countPatternStringInHttpBody(
 	return
 }
 
-// Returns the total Pattern Matches found by the Worker.
+// Returns the total Pattern Matches Count found by the Worker.
 func (w Worker) GetSummary() (numberOfGoStrings int) {
 	return w.numberOfGoStrings
 }

@@ -42,10 +42,11 @@ import (
 	"sync"
 )
 
-// Processor's Errors.
+// Processor's Errors & Messages.
 const (
-	ErrMsgReadingStdin = "Encountered an Error while reading the standard Input Stream:"
-	MsgAborting        = "Aborting the Reading..."
+	ErrMsgReadingStdin    = "Encountered an Error while reading the standard Input Stream:"
+	MsgAborting           = "Aborting the Reading..."
+	MsgPatternsTotalCount = "Patterns Total Count:"
 )
 
 // Processor's Settings.
@@ -55,6 +56,7 @@ const (
 	WorkersCountLimitDefault       = 5
 	ProtocolDefault                = "http"
 	ProtocolSeparator              = "://"
+	LineDelimiter                  = '\n'
 )
 
 // Worker is the main Object which controls the URL Reading and Processing.
@@ -109,7 +111,7 @@ func (p *Processor) Use() {
 		log.Println(ErrMsgReadingStdin, err)
 		log.Println(MsgAborting)
 	}
-	fmt.Println("Patterns Total Count:", numberOfGoStrings)
+	fmt.Println(MsgPatternsTotalCount, numberOfGoStrings)
 }
 
 // Processor Initialization.
@@ -188,7 +190,7 @@ func (p Processor) getUrlFromStdin(
 	// This Delimiter may be useless for some exotic Operating Systems,
 	// e.g. for ancient Commodore, ZX Spectrum and many others.
 	// See 'https://en.wikipedia.org/wiki/Newline' for more Information.
-	line, err = readerOfStdin.ReadString('\n')
+	line, err = readerOfStdin.ReadString(LineDelimiter)
 	if err != nil {
 		if err == io.EOF {
 			err = nil
@@ -231,20 +233,22 @@ func (p *Processor) startWorkerIfNeeded() (err error) {
 
 	var worker *Worker
 
-	if p.economyModeIsUsed {
-		p.receivedTasksCount++
-		if p.receivedTasksCount >= uint(p.workersCountLimit) {
-			p.economyModeIsUsed = false
-		}
-
-		// Start an additional Worker.
-		worker = NewWorker(p.receivedTasksCount, p)
-		p.workers = append(p.workers, worker)
-		err = worker.Start()
-		if err != nil {
-			return
-		}
-		p.workersWG.Add(1)
+	if !p.economyModeIsUsed {
+		return
 	}
+
+	p.receivedTasksCount++
+	if p.receivedTasksCount >= uint(p.workersCountLimit) {
+		p.economyModeIsUsed = false
+	}
+
+	// Start an additional Worker.
+	worker = NewWorker(p.receivedTasksCount, p)
+	p.workers = append(p.workers, worker)
+	err = worker.Start()
+	if err != nil {
+		return
+	}
+	p.workersWG.Add(1)
 	return
 }
