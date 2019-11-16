@@ -8,8 +8,8 @@ import (
 	"errors"
 	"log"
 
-	c "github.com/legacy-vault/tests/go/46/Component"
-	e "github.com/legacy-vault/tests/go/46/Component/Error"
+	c "github.com/legacy-vault/tests/go/46-error-nesting/Component"
+	e "github.com/legacy-vault/tests/go/46-error-nesting/Component/Error"
 )
 
 func main() {
