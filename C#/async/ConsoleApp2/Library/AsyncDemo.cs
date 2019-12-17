@@ -61,14 +61,14 @@ namespace Library
 			Thread.Sleep(2000);
 			var subTask = Task.Factory.StartNew(() => InnerJob(123), TaskCreationOptions.AttachedToParent);
 			Thread.Sleep(1000); // Parallel with a sub-Task.
-			return 123;
+			return subTask.Result;
 		}
 
 		public static int InnerJob(int data)
 		{
 			Console.WriteLine($"InnerJob({data})");
 			Thread.Sleep(5000);
-			return -data;
+			return data * (-2);
 		}
 	}
 }

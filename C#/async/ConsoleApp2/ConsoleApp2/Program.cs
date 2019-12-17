@@ -29,10 +29,11 @@ namespace ConsoleApp2
 			Stopwatch timer = Stopwatch.StartNew();
 			timer.Start();
 			string id = "xyz-id";
-			Task t = Task.Factory.StartNew(() => AsyncDemo.GetSomeDataById(id)).
+			Task<int> t = Task.Factory.StartNew(() => AsyncDemo.GetSomeDataById(id)).
 				ContinueWith(previousTask => AsyncDemo.ProcessSomeData(previousTask.Result));
 			t.Wait();
 			timer.Stop();
+			Console.WriteLine($"Result: {t.Result}.");
 			Console.WriteLine($"Chain of Tasks has been completed in {timer.Elapsed}.");
 		}
 
@@ -41,9 +42,10 @@ namespace ConsoleApp2
 			Stopwatch timer = Stopwatch.StartNew();
 			timer.Start();
 			string id = "xyz-id";
-			Task outerTask = Task.Factory.StartNew(() => AsyncDemo.OuterJob(id));
+			Task<int> outerTask = Task.Factory.StartNew(() => AsyncDemo.OuterJob(id));
 			outerTask.Wait();
 			timer.Stop();
+			Console.WriteLine($"Result: {outerTask.Result}.");
 			Console.WriteLine($"Chain of Tasks has been completed in {timer.Elapsed}.");
 		}
 
