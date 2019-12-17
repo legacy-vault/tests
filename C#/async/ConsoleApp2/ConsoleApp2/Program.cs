@@ -28,7 +28,7 @@ namespace ConsoleApp2
 			for (int i = 1; i <= tasksCount; i++)
 			{
 				int n = 5_000 * i;
-				Task t = Task.Run(() => AsyncDemo.CalculateSomeDataAsync(n));
+				Task t = AsyncDemo.CalculateSomeDataAsync(n);
 				tasks.Add(t);
 			}
 			Task workTask = Task.WhenAll(tasks);
@@ -43,7 +43,7 @@ namespace ConsoleApp2
 			for (int i = 1; i <= tasksCount; i++)
 			{
 				int n = 5_000 * i;
-				Task<double> t = Task<double>.Run(() => AsyncDemo.CalculateSomeDataWithResultAsync(n));
+				Task<double> t = AsyncDemo.CalculateSomeDataWithResultAsync(n);
 				tasks.Add(t);
 			}
 			Task workTask = Task.WhenAll(tasks);
