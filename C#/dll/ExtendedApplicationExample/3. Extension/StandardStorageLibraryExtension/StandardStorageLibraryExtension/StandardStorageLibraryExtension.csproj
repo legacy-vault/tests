@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="StandardStorageInterfaceLibrary">
+      <HintPath>..\..\..\1. InterfaceLibrary\StandardStorageInterfaceLibrary\StandardStorageInterfaceLibrary\bin\Release\netcoreapp3.1\StandardStorageInterfaceLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ext\StandardStorageInterfaceLibrary.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,2 @@
+The DLL File in this Folder has been manually copied from another Visual Studio Solution.
+See the main 'ReadMe.txt' File for more Information.
