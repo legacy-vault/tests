@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Threading;
 
-// This is a Deomnstration of a very simple Console Chat Server.
+// This is a Demonstration of a very simple Console Chat Server.
 // As opposed to the Server, the Client has been written just to test the Server fast.
 
 namespace ConsoleChatClient

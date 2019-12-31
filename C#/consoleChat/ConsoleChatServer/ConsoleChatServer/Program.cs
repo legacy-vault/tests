@@ -1,7 +1,7 @@
 ﻿using ConsoleChatServerLibrary;
 using System;
 
-// This is a Deomnstration of a very simple Console Chat Server.
+// This is a Demonstration of a very simple Console Chat Server.
 
 namespace ConsoleChatServer
 {
