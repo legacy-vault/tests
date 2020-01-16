@@ -1,0 +1,25 @@
+﻿@model IEnumerable<HelloMvcApp.Models.Phone>
+@{
+	ViewData["Title"] = "Goods";
+}
+
+<div class="text-center">
+	<h3 class="display-4">Phones</h3>
+	<table>
+		<tr>
+			<td>Model</td>
+			<td>Brand</td>
+			<td>Price</td>
+			<td></td>
+		</tr>
+		@foreach (var phone in Model)
+		{
+			<tr>
+				<td>@phone.Name</td>
+				<td>@phone.Company</td>
+				<td>@phone.Price</td>
+				<td><a href="~/Home/Buy/@phone.Id">Buy</a></td>
+			</tr>
+		}
+	</table>
+</div>
