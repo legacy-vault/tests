@@ -11,8 +11,7 @@ namespace ConsoleChatServerLibrary
 
 		public ChatServerSettings(string host = DefaultHost, ushort port = DefaultPort)
 		{
-			this.Host = host;
-			this.Port = port;
+			Init(host, port);
 		}
 		public ChatServerSettings(string[] programArguments)
 		{
