@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StandardStorageLibrary\StandardStorageLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="StandardStorageInterfaceLibrary">
+      <HintPath>..\..\1. InterfaceLibrary\StandardStorageInterfaceLibrary\StandardStorageInterfaceLibrary\bin\Release\netcoreapp3.1\StandardStorageInterfaceLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

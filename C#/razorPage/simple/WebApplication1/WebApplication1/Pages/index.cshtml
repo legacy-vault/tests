@@ -1,0 +1,19 @@
+@page
+@functions
+{
+	public string DayTime { get; set; }
+	public void OnGet()
+	{
+		ViewData["Title"] = "Northwind Web Site";
+		Model.DayTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+	}
+}
+
+<p>
+	It's @Model.DayTime now.
+</p>
+<p>
+	<a class="btn btn-primary" href="suppliers">
+		Learn more about our suppliers
+	</a>
+</p>
